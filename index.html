@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator using JavaScript</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="calculator">
+            <h2 class="text-7xl text-white font-semibold mb-4">Calculator</h2>
+            <form action="">
+                <div class="display">
+                    <input type="text" name="display" id="display" readonly>
+                </div>
+                <div>
+                    <input type="button" value="AC" onclick="clearDisplay()" class="button1">
+                    <input type="button" value="DE" onclick="deleteLastChar()" class="button1">
+                    <input type="button" value="." onclick="addToDisplay('.')" class="button1">
+                    <input type="button" value="/" onclick="addToDisplay('/')" class="button1 operator">
+                </div>
+                <div>
+                    <input type="button" value="7" onclick="addToDisplay('7')" class="button1">
+                    <input type="button" value="8" onclick="addToDisplay('8')" class="button1">
+                    <input type="button" value="9" onclick="addToDisplay('9')" class="button1">
+                    <input type="button" value="*" onclick="addToDisplay('*')" class="button1 operator">
+                </div>
+                <div>
+                    <input type="button" value="4" onclick="addToDisplay('4')" class="button1">
+                    <input type="button" value="5" onclick="addToDisplay('5')" class="button1">
+                    <input type="button" value="6" onclick="addToDisplay('6')" class="button1">
+                    <input type="button" value="-" onclick="addToDisplay('-')" class="button1 operator">
+                </div>
+                <div>
+                    <input type="button" value="1" onclick="addToDisplay('1')" class="button1">
+                    <input type="button" value="2" onclick="addToDisplay('2')" class="button1">
+                    <input type="button" value="3" onclick="addToDisplay('3')" class="button1">
+                    <input type="button" value="+" onclick="addToDisplay('+')" class="button1 operator">
+                </div>
+                <div>
+                    <input type="button" value="00" onclick="addToDisplay('0')" class="button1">
+                    <input type="button" value="0" onclick="addToDisplay('0')" class="button1">
+                    <input type="button" value="=" onclick="calculateResult()" class="equal">
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        let resultDisplayed = false;
+
+        function clearDisplay() {
+            document.getElementById('display').value = '';
+            resultDisplayed = false;
+        }
+
+        function deleteLastChar() {
+            const display = document.getElementById('display');
+            display.value = display.value.slice(0, -1);
+            resultDisplayed = false;
+        }
+
+        function addToDisplay(value) {
+            const display = document.getElementById('display');
+            if (resultDisplayed && !['+', '-', '*', '/'].includes(value)) {
+                display.value = value;
+                resultDisplayed = false;
+            } else {
+                display.value += value;
+                resultDisplayed = false;
+            }
+        }
+
+        function calculateResult() {
+            const display = document.getElementById('display');
+            try {
+                display.value = eval(display.value);
+                resultDisplayed = true;
+            } catch (error) {
+                display.value = 'Error';
+                resultDisplayed = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const display = document.getElementById('display');
+
+            document.addEventListener('keydown', (e) => {
+                e.preventDefault();
+
+                if (/^\d$/.test(e.key)) { // Check if the pressed key is a digit
+                    addToDisplay(e.key);
+                } else if (['+', '-', '*', '/'].includes(e.key)) {
+                    addToDisplay(e.key);
+                } else if (e.key === 'Enter') {
+                    
+                    calculateResult();
+                } else if (e.key === 'Backspace') {
+                    deleteLastChar();
+                } else if (e.key === 'Escape') {
+                    clearDisplay();
+                } else if (e.key === '.') {
+                    addToDisplay(e.key);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
